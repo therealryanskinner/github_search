@@ -36,8 +36,8 @@ export default function RepoTable() {
                   {repo.name}
                 </Button>
               </Table.RowHeaderCell>
-              <Table.Cell>{moment(repo.created_at).format("DD/MM/YYYY hh:mm A")}</Table.Cell>
-              <Table.Cell>{moment(repo.updated_at).format("DD/MM/YYYY hh:mm A")}</Table.Cell>
+              <Table.Cell>{moment(repo.created_at).format("MM/DD/YYYY hh:mm A")}</Table.Cell>
+              <Table.Cell>{moment(repo.updated_at).format("MM/DD/YYYY hh:mm A")}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>

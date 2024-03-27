@@ -47,7 +47,11 @@ function getQuery(searchArgs: TSearchParams) {
   }
 }
 
-function getMaxPages(currMax: number, link?: string, nextPage?: number): { totalPages: number } {
+function getMaxPages(
+  currMax: number,
+  link?: string,
+  nextPage?: number
+): { totalPages: number } {
   // If we're already at the max page, return the current max
   if (nextPage && nextPage === currMax) return { totalPages: currMax };
 
@@ -64,7 +68,7 @@ function getMaxPages(currMax: number, link?: string, nextPage?: number): { total
   return { totalPages: Number(lastPage?.[1]) };
 }
 
-export default function useGithubRepoSearch() {
+export function useGithubRepoSearch() {
   const {
     searchQuery,
     searchType,
@@ -76,11 +80,19 @@ export default function useGithubRepoSearch() {
   } = useSearchStore((state) => state);
 
   async function searchGithub(overrides?: TSearchParams) {
+    const query = (overrides?.searchQuery || searchQuery).trim()
+
+    if (!query) {
+      setRepos([]);
+      setPagination(0, 0);
+      return;
+    }
+
     const { endpoint, body } = getQuery({
       ...advancedSearchOptions,
       ...overrides,
-      searchQuery,
-      searchType,
+      searchQuery: query,
+      searchType: overrides?.searchType || searchType,
     });
 
     try {
@@ -90,7 +102,11 @@ export default function useGithubRepoSearch() {
         ...body,
       });
 
-      const { totalPages } = getMaxPages(maxPages, res?.headers?.link, overrides?.page);
+      const { totalPages } = getMaxPages(
+        maxPages,
+        res?.headers?.link,
+        overrides?.page
+      );
 
       const data = res.data as TGithubRepo[];
 
@@ -98,7 +114,7 @@ export default function useGithubRepoSearch() {
       setPagination(totalPages, overrides?.page || 1);
     } catch (e) {
       console.error("Error fetching data from Github API: ", e);
-      setRepos([])
+      setRepos([]);
     } finally {
       setLoading(false);
     }

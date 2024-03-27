@@ -2,7 +2,7 @@ import { TextField } from "@radix-ui/themes";
 import { useSearchStore } from "../Store/searchStore";
 import { useDebouncedValue } from "../Hooks/useDebouncedValue";
 import { useEffect } from "react";
-import useGithubRepoSearch from "../Hooks/useGithubRepoSearch";
+import { useGithubRepoSearch } from "../Hooks/useGithubRepoSearch";
 
 export default function SearchInput() {
   const searchQuery = useSearchStore((state) => state.searchQuery);

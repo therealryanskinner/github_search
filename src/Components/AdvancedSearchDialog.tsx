@@ -12,7 +12,7 @@ import { Controller, useForm } from "react-hook-form";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useGithubRepoSearch from "../Hooks/useGithubRepoSearch";
+import { useGithubRepoSearch } from "../Hooks/useGithubRepoSearch";
 import {
   TRepoType,
   TSearchType,
@@ -55,13 +55,15 @@ const defaultValues: TAdvancedSearch = {
 
 export default function AdvancedSearchDialog() {
   const isOpen = useSearchStore((state) => state.advancedSearchOpen);
-  const setAdvancedSearchOpen = useSearchStore(
-    (state) => state.setAdvancedSearchOpen
-  );
   const options = useSearchStore((state) => state.advancedSearchOptions);
+  const setSearchType = useSearchStore((state) => state.setSearchType);
   const setAdvancedSearchOptions = useSearchStore(
     (state) => state.setAdvancedSearchOptions
   );
+  const setAdvancedSearchOpen = useSearchStore(
+    (state) => state.setAdvancedSearchOpen
+  );
+
   const { searchGithub } = useGithubRepoSearch();
 
   const {
@@ -90,6 +92,7 @@ export default function AdvancedSearchDialog() {
       page: data.page,
     });
 
+    setSearchType(data.searchType);
     setAdvancedSearchOptions(commonData);
   }
 
